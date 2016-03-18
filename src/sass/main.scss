@@ -1,0 +1,279 @@
+/*------------------------------------*\
+    #IMPORTS
+\*------------------------------------*/
+
+@import "normalize";
+
+
+
+
+
+/*------------------------------------*\
+    #VARIABLES
+\*------------------------------------*/
+
+$modal-bg-color: hsla(255, 100%, 98%, .9);
+$modal-overlay-color: hsla(255, 100%, 95%, .3);
+$black: hsl(0, 0%, 16%);
+$black-shadow: transparentize($black, .4);
+$blue: hsl(217, 72%, 50%);
+$dark-blue: darken($blue, 20%);
+$color-unselected: hsl(0, 0%, 40%);
+$white: hsl(255, 100%, 95%);
+$light-grey: lighten($black, 70%);
+$light-green: hsl(90, 41%, 70%);
+
+$modal-title-font: 'Glegoo', serif;
+$modal-start-font: 'Ubuntu Mono', sans-serif;
+
+
+
+/*------------------------------------*\
+    #GENERAL
+\*------------------------------------*/
+
+body {
+  background-color: $black;
+}
+
+button {
+  border: none;
+  border-radius: .5rem;
+  box-sizing: border-box;
+  padding: .8rem;
+
+  /* Firefox specific rule, for change the ugly dotted border when a button
+   * gets the focus.
+   */
+  &::-moz-focus-inner {
+    border: none;
+  }
+}
+
+%centered {
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+}
+
+%icon {
+  height: 100%;
+  width: 100%;
+}
+
+
+
+
+
+/*------------------------------------*\
+    #BOARD
+\*------------------------------------*/
+
+.disabled {
+  pointer-events: none;
+}
+
+.board {
+  @extend %centered;
+  display: flex;
+  flex-direction: column;
+  height: 650px;
+  margin: auto;
+  max-height: 90vh;
+  max-width: 90vw;
+  position: absolute;
+  width: 650px;
+
+  &-row {
+    display: flex;
+    height: 33%;
+    width: 100%;
+  }
+}
+
+.square {
+  background-color: $light-grey;
+  border: .5rem solid $black;
+  border-radius: 0;
+  box-sizing: border-box;
+  height: 100%;
+  transition: all .4s;
+  width: 33%;
+
+  &:hover {
+    background-color: $white;
+    transition: all .4s;
+  }
+}
+
+/* Highlight the squares part of the winning line */
+
+%winner {
+  background-color: $light-green;
+  transform: scale(1.1);
+}
+
+@each $n in 1, 2, 3 {
+  .winner#{$n} {
+    @extend %winner;
+    transition: all .4s ease-in (.4s * ($n - 1));
+  }
+}
+
+/* Fades the squares of the board not part of the winning line */
+.fade {
+    opacity: .5;
+    transition: all .4s;
+}
+
+
+/* Tokens */
+
+.token-img {
+  @extend %icon;
+}
+
+
+
+
+
+/*------------------------------------*\
+    #MODAL
+\*------------------------------------*/
+
+.modal {
+  @extend %centered;
+  position: fixed;
+
+  &-container {
+    background-color: $modal-bg-color;
+    border-radius: .4rem;
+    box-shadow: 0 0 1rem $black-shadow;
+    box-sizing: border-box;
+    font-family: $modal-title-font;
+    height: 400px;
+    margin: auto;
+    max-height: 90%;
+    max-width: 90%;
+    padding: 2rem;
+    transition: transform .3s;
+    visibility: visible;
+    width: 400px;
+    z-index: 1000;
+
+    &.hidden {
+      transform: scale(0);
+      transition: all .3s;
+      visibility: hidden;
+    }
+  }
+
+  &-overlay {
+    background: $modal-overlay-color;
+    height: 100%;
+    width: 100%;
+    z-index: 999;
+
+    &.hidden {
+      display: none;
+    }
+  }
+}
+
+
+.option {
+  &-row {
+    display: flex;
+    flex-direction: column;
+    height: 40%;
+    justify-content: center;
+    width: 100%;
+
+    &:last-child {
+      height: 20%;
+      flex-direction: row;
+    }
+  }
+
+  &-group {
+    display: flex;
+    height: 80%;
+    justify-content: space-around;
+    padding: 5%;
+  }
+
+  &-title {
+    line-height: 1.5rem;
+    margin: 0;
+    text-align: center;
+  }
+
+  &-btn {
+    background-color: transparent;
+    min-height: 5rem;
+    min-width: 5rem;
+    width: 30%;
+  }
+
+  &-icon {
+    @extend %icon;
+  }
+}
+
+.token {
+
+  path {
+      transition: all .4s;
+  }
+
+  &.unselected {
+    path {
+      stroke: $color-unselected;
+      transition: all .4s;
+    }
+  }
+}
+
+.player {
+
+  circle,
+  rect,
+  path {
+      transition: all .4s;
+  }
+
+  &.unselected {
+    circle,
+    path,
+    rect {
+      fill: $color-unselected;
+      transition: all .4s;
+    }
+  }
+}
+
+.start-btn {
+  align-self: center;
+  background-color: $blue;
+  box-shadow: 0 7px 0 $dark-blue;
+  color: $white;
+  font: {
+    family: $modal-start-font;
+    size: 1.5rem;
+    weight: bold;
+  }
+  line-height: 1.5rem;
+  max-height: 3rem;
+  max-width: 12rem;
+  position: relative;
+  transition: all .1s;
+  width: 50%;
+
+  &:active {
+    box-shadow: 0 2px 0 $dark-blue;
+    top: 5px;
+    transition: all .1s;
+  }
+}

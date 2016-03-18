@@ -1,0 +1,9 @@
+{
+  "esversion": 6,
+  "curly": true,
+  "eqeqeq": true,
+  "futurehostile": true,
+  "latedef": "nofunc",
+  "quotmark": true,
+  "varstmt": true
+}
